@@ -66,10 +66,10 @@ export const tvApi = {
 - [x] Movie Detail <br/>
 - [x] Search (Movie, TV) <br/>
 - [x] IMDB Link <br/>
-- [ ] Tabs inside of Movie / Show Details (YT Videos, Production Company & Countries) <br/>
-- [ ] Collections Link <br/>
-- [ ] /collections Route <br/>
-- [ ] On TV Show, show seasons and creators <br/>
+- [x] Tabs inside of Movie / Show Details (YT Videos, Production Company & Countries) <br/>
+- [x] Collections Link <br/>
+- [x] /collections Route <br/>
+- [x] On TV Show, show seasons and creators <br/>
 
 2.화면
 - [x] Movie <br/>
