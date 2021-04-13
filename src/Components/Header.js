@@ -8,6 +8,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const Menu = styles.div`
 margin-top:10px;
+margin-bottom: 10px;
 font-size:30px;
 cursor:pointer;
 `;
@@ -22,7 +23,7 @@ const SideNav = styles.div`
 height: 100%;
 width: ${(props) => (props.children[0].props.open ? '100%' : '0px')};
 position: fixed;
-z-index: 1;
+z-index: 999;
 top: 0;
 left: 0;
 background-color: #111;
