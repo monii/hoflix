@@ -22,7 +22,7 @@
 -----------------
 ### :clap: 결과
 
-:point_right:https://sharp-beaver-c7285b.netlify.app
+:point_right:https://ho-flix.netlify.app
 
 -----------------
 
