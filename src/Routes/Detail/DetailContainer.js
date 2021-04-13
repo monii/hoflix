@@ -19,13 +19,10 @@ class Detail extends React.Component {
 
   async componentDidMount() {
     const {
-      match: {
-        params: { id },
-      },
       history: { push },
     } = this.props;
     const { isMovie } = this.state;
-    const parsedId = parseInt(id);
+    const parsedId = parseInt(this.state.id);
     if (isNaN(parsedId)) {
       return push('/');
     }

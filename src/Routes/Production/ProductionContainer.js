@@ -1,70 +1,72 @@
 import React from 'react';
-import VideoPresenter from './VideoPresenter';
+import ProductionPresnter from './ProductionPresnter';
 import { moviesApi, tvApi } from '../../api';
 
-class Video extends React.Component {
+class Production extends React.Component {
   constructor(props) {
     super(props);
     const {
       location: { pathname },
     } = props;
     this.state = {
-      result: null,
+      countries: [],
+      companies: [],
       error: null,
       isMovie: pathname.includes('/movie/'),
       loading: true,
-      videos: [],
-      videosLen: 0,
-      id: this.props.match.params.id,
+      result: null,
+      id: '',
     };
   }
 
   async componentDidMount() {
     const {
       history: { push },
+      match: {
+        params: { id },
+      },
     } = this.props;
     const { isMovie } = this.state;
-    const parsedId = parseInt(this.state.id);
+    const parsedId = parseInt(id);
     if (isNaN(parsedId)) {
       return push('/');
     }
     let result = null;
-    let video = null;
+    let countries = [];
+    let companies = [];
     try {
       if (isMovie) {
         ({
           data: result,
-          data: {
-            videos: { results: video },
-          },
+          data: { production_companies: companies },
+          data: { production_countries: countries },
         } = await moviesApi.movieDetail(parsedId));
-        this.setState({ videosLen: video.length });
+        this.setState({ result });
       } else {
         ({
           data: result,
-          data: {
-            videos: { results: video },
-          },
+          data: { production_companies: companies },
+          data: { production_countries: countries },
         } = await tvApi.showDetail(parsedId));
-        this.setState({ videosLen: video.length });
+        this.setState({ result });
       }
-      this.setState({ result, video });
+      this.setState({ companies, countries });
     } catch {
       this.setState({
-        error: "Can't find Video information.",
+        error: "Can't find Production information.",
       });
     } finally {
-      this.setState({ loading: false });
+      this.setState({ loading: false, id });
     }
   }
 
   render() {
     return (
       <>
-        <VideoPresenter {...this.state}></VideoPresenter>
+        <ProductionPresnter {...this.state}></ProductionPresnter>
       </>
     );
   }
 }
 
-export default Video;
+export default Production;

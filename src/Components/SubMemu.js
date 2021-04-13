@@ -51,7 +51,7 @@ const SubMenu = ({ id, isMovie = true }) => {
             <Alink to={`/movie/${id}/video`}>VIDEO</Alink>
           </SubMuenLi>
           <SubMuenLi>
-            <Alink to="/">PRODUCT</Alink>
+            <Alink to={`/movie/${id}/production`}>PRODUCT</Alink>
           </SubMuenLi>
         </SubMuenUl>
       ) : (
@@ -63,10 +63,10 @@ const SubMenu = ({ id, isMovie = true }) => {
             <Alink to={`/show/${id}/video`}>VIDEO</Alink>
           </SubMuenLi>
           <SubMuenLi>
-            <Alink to="/">PRODUCT</Alink>
+            <Alink to={`/show/${id}/production`}>PRODUCT</Alink>
           </SubMuenLi>
           <SubMuenLi>
-            <Alink to="/">SEASON</Alink>
+            <Alink to={`/show/${id}/season`}>SEASON</Alink>
           </SubMuenLi>
         </SubMuenUl>
       )}
