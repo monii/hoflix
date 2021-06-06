@@ -131,7 +131,7 @@ const useShow = () => {
         leftBtn.current.removeEventListener('click', handleLeftBtn);
       }
     };
-  }, [currentIndex]);
+  }, []);
 
   return {
     rigthBtn,
@@ -186,7 +186,7 @@ const VideoPresenter = ({
         <VideoContainer>
           {video.map((trailer, index) => (
             <VideoSlide
-              key={index}
+              key={index.toString()}
               ref={slide}
               style={
                 index === currentIndex
@@ -194,9 +194,6 @@ const VideoPresenter = ({
                   : { display: 'none' }
               }
             >
-              {console.log('videolent', videosLen)}
-              {console.log('index', index)}
-              {console.log('currentIndex', currentIndex)}
               <iframe
                 src={`https://www.youtube.com/embed/${trailer.key}`}
               ></iframe>
@@ -207,20 +204,16 @@ const VideoPresenter = ({
               <SliderLeftBtn
                 ref={leftBtn}
                 onClick={handleLeftBtn}
-                style={
-                  currentIndex < 0 ? { display: 'none' } : { display: 'block' }
-                }
+                style={{ display: currentIndex > 0 ? 'block' : 'none' }}
               >
                 &#10094;
               </SliderLeftBtn>
               <SliderRigthBtn
                 ref={rigthBtn}
                 onClick={handleRigthBtn}
-                style={
-                  currentIndex > video.length
-                    ? { display: 'none' }
-                    : { display: 'block' }
-                }
+                style={{
+                  display: currentIndex < videosLen - 1 ? 'block' : 'none',
+                }}
               >
                 &#10095;
               </SliderRigthBtn>
