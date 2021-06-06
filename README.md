@@ -22,7 +22,7 @@
 -----------------
 ### :clap: 결과
 
-:point_right:
+:point_right:https://ho-flix.netlify.app
 
 -----------------
 
