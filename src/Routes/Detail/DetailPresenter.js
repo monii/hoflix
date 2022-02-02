@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import Loader from '../../Components/Loader';
-import SubMenu from '../../Components/SubMemu';
-import Helmet from 'react-helmet';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import Loader from "../../Components/Loader";
+import SubMenu from "../../Components/SubMemu";
+import Helmet from "react-helmet";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -80,11 +80,11 @@ const ImdbIcon = styled.div`
   font-weight: 800;
 `;
 
-const DetailPresenter = ({ result, loading, error, isMovie, id }) =>
-  loading ? (
+const DetailPresenter = ({ result, loading, error, isMovie, id }) => {
+  return loading ? (
     <>
       <Helmet>
-        <title>{isMovie ? 'Movie' : 'TV'} | HO!FLEX</title>
+        <title>{isMovie ? "Movie" : "TV"} | HO!FLEX</title>
       </Helmet>
       <Loader />
     </>
@@ -106,7 +106,7 @@ const DetailPresenter = ({ result, loading, error, isMovie, id }) =>
             bgImage={
               result.poster_path
                 ? `https://image.tmdb.org/t/p/original${result.poster_path}`
-                : '/assets/noPosterSmall.png'
+                : "/assets/noPosterSmall.png"
             }
           />
           <Data>
@@ -117,13 +117,18 @@ const DetailPresenter = ({ result, loading, error, isMovie, id }) =>
             </Title>
             <ItemContainer>
               <Item>
-                {result.release_date
-                  ? result.release_date.substring(0, 4)
-                  : result.first_air_date.substring(0, 4)}
+                {result.release_date &&
+                  result.release_date.length > 0 &&
+                  result.release_date.substring(0, 4)}
+              </Item>
+              <Item>
+                {result.first_air_date &&
+                  result.first_air_date.length > 0 &&
+                  result.first_air_date.substring(0, 4)}
               </Item>
               <Divider>•</Divider>
               <Item>
-                {result.runtime ? result.runtime : result.episode_run_time[0]}{' '}
+                {result.runtime ? result.runtime : result.episode_run_time[0]}{" "}
                 min
               </Item>
               <Divider>•</Divider>
@@ -136,9 +141,9 @@ const DetailPresenter = ({ result, loading, error, isMovie, id }) =>
                   )}
               </Item>
             </ItemContainer>
-            {isMovie ? (
+            {isMovie && result.imdb_id ? (
               <ImdbIcon>
-                {' '}
+                {" "}
                 <a
                   target="_blank"
                   href={`https://imdb.com/title/${result.imdb_id}`}
@@ -154,6 +159,7 @@ const DetailPresenter = ({ result, loading, error, isMovie, id }) =>
       </Container>
     </>
   );
+};
 
 DetailPresenter.propTypes = {
   result: PropTypes.object,
