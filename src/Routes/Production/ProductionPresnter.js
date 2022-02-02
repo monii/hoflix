@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import Loader from '../../Components/Loader';
-import SubMenu from '../../Components/SubMemu';
-import Helmet from 'react-helmet';
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import Loader from "../../Components/Loader";
+import SubMenu from "../../Components/SubMemu";
+import Helmet from "react-helmet";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -39,7 +39,7 @@ const Title = styled.p`
   font-size: 30px;
 `;
 
-const County = styled.div`
+const Country = styled.div`
   margin-bottom: 8px;
   font-size: 20px;
 `;
@@ -83,7 +83,7 @@ const ProductionPresnter = ({
   loading ? (
     <>
       <Helmet>
-        <title>{isMovie ? 'Movie' : 'TV'} | HO!FLEX</title>
+        <title>{isMovie ? "Movie" : "TV"} | HO!FLEX</title>
       </Helmet>
       <Loader />
     </>
@@ -103,29 +103,25 @@ const ProductionPresnter = ({
         <CountryDiv>
           <Title>Production Countries</Title>
           {countries.map((country) => (
-            <>
-              <County>-{country.name}</County>
-            </>
+            <Country key={country.name}>-{country.name}</Country>
           ))}
         </CountryDiv>
         <CompanyDiv>
           <Title>Production Companies</Title>
           <LogoContainer>
             {companies.map((company) => (
-              <>
-                <div>
-                  <ImageContainer>
-                    <Image
-                      bgUrl={
-                        company.logo_path
-                          ? `https://image.tmdb.org/t/p/original/${company.logo_path}`
-                          : '/assets/noPosterSmall.png'
-                      }
-                    />
-                  </ImageContainer>
-                  <CompanyName>{company.name}</CompanyName>
-                </div>
-              </>
+              <div key={company.id}>
+                <ImageContainer>
+                  <Image
+                    bgUrl={
+                      company.logo_path
+                        ? `https://image.tmdb.org/t/p/original/${company.logo_path}`
+                        : "/assets/noPosterSmall.png"
+                    }
+                  />
+                </ImageContainer>
+                <CompanyName>{company.name}</CompanyName>
+              </div>
             ))}
           </LogoContainer>
         </CompanyDiv>

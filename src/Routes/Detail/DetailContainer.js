@@ -1,52 +1,57 @@
-import React from 'react';
-import DetailPresenter from './DetailPresenter';
-import { moviesApi, tvApi } from '../../api';
+import React, { useEffect } from "react";
+import { useImmer } from "use-immer";
+import DetailPresenter from "./DetailPresenter";
+import { moviesApi, tvApi } from "../../api";
 
-class Detail extends React.Component {
-  constructor(props) {
-    super(props);
-    const {
-      location: { pathname },
-    } = props;
-    this.state = {
-      result: null,
-      error: null,
-      loading: true,
-      isMovie: pathname.includes('/movie/'),
-      id: this.props.match.params.id,
-    };
-  }
+const Detail = (props) => {
+  const {
+    location: { pathname },
+    match: {
+      params: { id },
+    },
+  } = props;
+  const state = {
+    result: null,
+    error: null,
+    loading: true,
+    isMovie: pathname.includes("/movie/"),
+    id: id,
+  };
+  const [values, setValues] = useImmer(state);
 
-  async componentDidMount() {
-    const {
-      history: { push },
-    } = this.props;
-    const { isMovie } = this.state;
-    const parsedId = parseInt(this.state.id);
+  useEffect(() => {
+    const isMovie = values.isMovie;
+    const parsedId = parseInt(values.id);
     if (isNaN(parsedId)) {
-      return push('/');
+      return props.history.push("/");
     }
     let result = null;
-    try {
-      if (isMovie) {
-        ({ data: result } = await moviesApi.movieDetail(parsedId));
-      } else {
-        ({ data: result } = await tvApi.showDetail(parsedId));
+    const getDates = async () => {
+      try {
+        if (isMovie) {
+          ({ data: result } = await moviesApi.movieDetail(parsedId));
+        } else {
+          ({ data: result } = await tvApi.showDetail(parsedId));
+        }
+      } catch {
+        setValues((draft) => {
+          draft.error = "Can't find anything.";
+        });
+      } finally {
+        setValues((draft) => {
+          draft.loading = false;
+          draft.result = result;
+        });
       }
-    } catch {
-      this.setState({ error: "Can't find anything." });
-    } finally {
-      this.setState({ loading: false, result });
-    }
-  }
+    };
+    getDates();
+  }, []);
 
-  render() {
-    return (
-      <>
-        <DetailPresenter {...this.state} />
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <DetailPresenter {...values} />
+    </>
+  );
+};
 
 export default Detail;

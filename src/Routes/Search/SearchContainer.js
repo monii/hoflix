@@ -1,36 +1,23 @@
-import React from 'react';
-import SearchPresenter from './SearchPresenter';
-import { moviesApi, tvApi } from '../../api';
+import React from "react";
+import SearchPresenter from "./SearchPresenter";
+import { moviesApi, tvApi } from "../../api";
+import { useImmer } from "use-immer";
 
-class Search extends React.Component {
-  state = {
+const Search = () => {
+  const state = {
     movieResults: null,
     tvResults: null,
-    searchTerm: '',
+    searchTerm: "",
     loading: false,
     error: null,
   };
+  const [values, setValues] = useImmer(state);
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-    const { searchTerm } = this.state;
-    if (searchTerm !== '') {
-      this.searchByTerm();
-    }
-  };
-
-  updateTerm = (event) => {
-    const {
-      target: { value },
-    } = event;
-    this.setState({
-      searchTerm: value,
+  const searchByTerm = async () => {
+    const searchTerm = values.searchTerm;
+    setValues((draft) => {
+      draft.loading = true;
     });
-  };
-
-  searchByTerm = async () => {
-    const { searchTerm } = this.state;
-    this.setState({ loading: true });
     try {
       const {
         data: { results: movieResults },
@@ -38,31 +25,48 @@ class Search extends React.Component {
       const {
         data: { results: tvResults },
       } = await tvApi.search(searchTerm);
-      this.setState({
-        movieResults,
-        tvResults,
+      setValues((draft) => {
+        draft.movieResults = movieResults;
+        draft.tvResults = tvResults;
       });
     } catch {
-      this.setState({ error: "Can't find results." });
+      setValues((draft) => {
+        draft.error = "Can't find results.";
+      });
     } finally {
-      this.setState({ loading: false });
+      setValues((draft) => {
+        draft.loading = false;
+      });
     }
   };
 
-  render() {
-    const { movieResults, tvResults, searchTerm, loading, error } = this.state;
-    return (
-      <SearchPresenter
-        movieResults={movieResults}
-        tvResults={tvResults}
-        loading={loading}
-        error={error}
-        searchTerm={searchTerm}
-        handleSubmit={this.handleSubmit}
-        updateTerm={this.updateTerm}
-      />
-    );
-  }
-}
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (values.searchTerm !== "") {
+      searchByTerm();
+    }
+  };
+
+  const updateTerm = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setValues((draft) => {
+      draft.searchTerm = value;
+    });
+  };
+
+  return (
+    <SearchPresenter
+      movieResults={values.movieResults}
+      tvResults={values.tvResults}
+      loading={values.loading}
+      error={values.error}
+      searchTerm={values.searchTerm}
+      handleSubmit={handleSubmit}
+      updateTerm={updateTerm}
+    />
+  );
+};
 
 export default Search;

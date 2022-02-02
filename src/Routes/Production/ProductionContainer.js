@@ -1,72 +1,79 @@
-import React from 'react';
-import ProductionPresnter from './ProductionPresnter';
-import { moviesApi, tvApi } from '../../api';
+import React, { useEffect } from "react";
+import { useImmer } from "use-immer";
+import ProductionPresnter from "./ProductionPresnter";
+import { moviesApi, tvApi } from "../../api";
 
-class Production extends React.Component {
-  constructor(props) {
-    super(props);
-    const {
-      location: { pathname },
-    } = props;
-    this.state = {
-      countries: [],
-      companies: [],
-      error: null,
-      isMovie: pathname.includes('/movie/'),
-      loading: true,
-      result: null,
-      id: '',
-    };
-  }
-
-  async componentDidMount() {
-    const {
-      history: { push },
-      match: {
-        params: { id },
-      },
-    } = this.props;
-    const { isMovie } = this.state;
-    const parsedId = parseInt(id);
-    if (isNaN(parsedId)) {
-      return push('/');
-    }
-    let result = null;
-    let countries = [];
-    let companies = [];
-    try {
-      if (isMovie) {
-        ({
-          data: result,
-          data: { production_companies: companies },
-          data: { production_countries: countries },
-        } = await moviesApi.movieDetail(parsedId));
-        this.setState({ result });
-      } else {
-        ({
-          data: result,
-          data: { production_companies: companies },
-          data: { production_countries: countries },
-        } = await tvApi.showDetail(parsedId));
-        this.setState({ result });
+const Production = (props) => {
+  const {
+    location: { pathname },
+    match: {
+      params: { id },
+    },
+    history: { push },
+  } = props;
+  const state = {
+    countries: [],
+    companies: [],
+    error: null,
+    isMovie: pathname.includes("/movie/"),
+    loading: true,
+    result: null,
+    id: "",
+  };
+  const [values, setValues] = useImmer(state);
+  useEffect(() => {
+    const getDatas = async () => {
+      const isMovie = values.isMovie;
+      const parsedId = parseInt(id);
+      if (isNaN(parsedId)) {
+        return push("/");
       }
-      this.setState({ companies, countries });
-    } catch {
-      this.setState({
-        error: "Can't find Production information.",
-      });
-    } finally {
-      this.setState({ loading: false, id });
-    }
-  }
+      let result = null;
+      let countries = [];
+      let companies = [];
+      try {
+        if (isMovie) {
+          ({
+            data: result,
+            data: { production_companies: companies },
+            data: { production_countries: countries },
+          } = await moviesApi.movieDetail(parsedId));
+          setValues((draft) => {
+            draft.result = result;
+          });
+        } else {
+          ({
+            data: result,
+            data: { production_companies: companies },
+            data: { production_countries: countries },
+          } = await tvApi.showDetail(parsedId));
+          setValues((draft) => {
+            draft.result = result;
+          });
+        }
+        setValues((draft) => {
+          draft.companies = companies;
+          draft.countries = countries;
+        });
+      } catch {
+        setValues((draft) => {
+          draft.error = "Can't find Production information.";
+        });
+      } finally {
+        setValues((draft) => {
+          draft.loading = false;
+          draft.id = id;
+        });
+      }
+    };
+    getDatas();
+  }, []);
 
-  render() {
-    return (
-      <>
-        <ProductionPresnter {...this.state}></ProductionPresnter>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <ProductionPresnter {...values}></ProductionPresnter>
+    </>
+  );
+};
 
 export default Production;
