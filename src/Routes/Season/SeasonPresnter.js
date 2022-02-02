@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import Loader from '../../Components/Loader';
-import SubMenu from '../../Components/SubMemu';
-import Helmet from 'react-helmet';
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import Loader from "../../Components/Loader";
+import SubMenu from "../../Components/SubMemu";
+import Helmet from "react-helmet";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -72,7 +72,7 @@ const SeasonPresnter = ({ season, error, loading, result, id }) =>
   ) : (
     <>
       <Helmet>
-        <title>{result ? result.original_name : 'TV'}| HO!FLEX</title>
+        <title>{result ? result.original_name : "TV"}| HO!FLEX</title>
       </Helmet>
       <Container>
         <SubMenu isMovie={false} id={id} />
@@ -83,18 +83,16 @@ const SeasonPresnter = ({ season, error, loading, result, id }) =>
           <Title>Season</Title>
           <SeasonContainer>
             {season.map((data) => (
-              <>
-                <div>
-                  <Image
-                    bgUrl={
-                      data.poster_path
-                        ? `https://image.tmdb.org/t/p/original/${data.poster_path}`
-                        : '/assets/noPosterSmall.png'
-                    }
-                  />
-                  <SeasonName>{data.name}</SeasonName>
-                </div>
-              </>
+              <div key={season.id}>
+                <Image
+                  bgUrl={
+                    data.poster_path
+                      ? `https://image.tmdb.org/t/p/original/${data.poster_path}`
+                      : "/assets/noPosterSmall.png"
+                  }
+                />
+                <SeasonName>{data.name}</SeasonName>
+              </div>
             ))}
           </SeasonContainer>
         </SeasonDiv>

@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import Loader from '../../Components/Loader';
-import SubMenu from '../../Components/SubMemu';
-import Helmet from 'react-helmet';
+import { useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import Loader from "../../Components/Loader";
+import SubMenu from "../../Components/SubMemu";
+import Helmet from "react-helmet";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -118,17 +118,17 @@ const useShow = () => {
   };
   useEffect(() => {
     if (rigthBtn.current) {
-      rigthBtn.current.addEventListener('click', handleRigthBtn);
+      rigthBtn.current.addEventListener("click", handleRigthBtn);
     }
     if (leftBtn.current) {
-      leftBtn.current.addEventListener('click', handleLeftBtn);
+      leftBtn.current.addEventListener("click", handleLeftBtn);
     }
     return () => {
       if (rigthBtn.current) {
-        rigthBtn.current.removeEventListener('click', handleRigthBtn);
+        rigthBtn.current.removeEventListener("click", handleRigthBtn);
       }
       if (leftBtn.current) {
-        leftBtn.current.removeEventListener('click', handleLeftBtn);
+        leftBtn.current.removeEventListener("click", handleLeftBtn);
       }
     };
   }, []);
@@ -163,7 +163,7 @@ const VideoPresenter = ({
   return loading ? (
     <>
       <Helmet>
-        <title>{isMovie ? 'Movie' : 'TV'} | HO!FLEX</title>
+        <title>{isMovie ? "Movie" : "TV"} | HO!FLEX</title>
       </Helmet>
       <Loader />
     </>
@@ -190,12 +190,13 @@ const VideoPresenter = ({
               ref={slide}
               style={
                 index === currentIndex
-                  ? { display: 'block' }
-                  : { display: 'none' }
+                  ? { display: "block" }
+                  : { display: "none" }
               }
             >
               <iframe
                 src={`https://www.youtube.com/embed/${trailer.key}`}
+                title={trailer.name}
               ></iframe>
             </VideoSlide>
           ))}
@@ -204,7 +205,7 @@ const VideoPresenter = ({
               <SliderLeftBtn
                 ref={leftBtn}
                 onClick={handleLeftBtn}
-                style={{ display: currentIndex > 0 ? 'block' : 'none' }}
+                style={{ display: currentIndex > 0 ? "block" : "none" }}
               >
                 &#10094;
               </SliderLeftBtn>
@@ -212,7 +213,7 @@ const VideoPresenter = ({
                 ref={rigthBtn}
                 onClick={handleRigthBtn}
                 style={{
-                  display: currentIndex < videosLen - 1 ? 'block' : 'none',
+                  display: currentIndex < videosLen - 1 ? "block" : "none",
                 }}
               >
                 &#10095;
