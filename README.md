@@ -80,7 +80,10 @@ export const tvApi = {
 --------------------------
   
 ### :pushpin: ToDo Update
-
+* 2022-02-02
+  * Class Component -> Function Component변경
+  * Detail 페이지 상영,방영 날짜 null 처리
+* css수정(해야할것)
 
 
 
