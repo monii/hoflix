@@ -83,10 +83,12 @@ export const tvApi = {
 * 2022-02-02
   * Class Component -> Function Component변경
   * Detail 페이지 상영,방영 날짜 null 처리  
+* 2022-02-06
+  * react waring 수정( React Hook useEffect has a missing dependency: ...)
 
 :point_down:해야할것
+* study Log정리(useEffect, useCallback)
 * css수정
-* react waring 수정( React Hook useEffect has a missing dependency: ...)
 
 
 
