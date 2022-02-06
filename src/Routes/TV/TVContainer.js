@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useImmer } from "use-immer";
 import TVPresenter from "./TVPresenter";
 import { tvApi } from "../../api";
@@ -13,35 +13,36 @@ const TV = () => {
   };
   const [values, setValues] = useImmer(state);
 
+  const getDates = useCallback(async () => {
+    try {
+      const {
+        data: { results: topRated },
+      } = await tvApi.topRated();
+      const {
+        data: { results: popular },
+      } = await tvApi.popular();
+      const {
+        data: { results: airingToday },
+      } = await tvApi.airingToday();
+      setValues((draft) => {
+        draft.topRated = topRated;
+        draft.popular = popular;
+        draft.airingToday = airingToday;
+      });
+    } catch {
+      setValues((draft) => {
+        draft.error = "Can't find TV information.";
+      });
+    } finally {
+      setValues((draft) => {
+        draft.loading = false;
+      });
+    }
+  }, [setValues]);
+
   useEffect(() => {
-    const getDates = async () => {
-      try {
-        const {
-          data: { results: topRated },
-        } = await tvApi.topRated();
-        const {
-          data: { results: popular },
-        } = await tvApi.popular();
-        const {
-          data: { results: airingToday },
-        } = await tvApi.airingToday();
-        setValues((draft) => {
-          draft.topRated = topRated;
-          draft.popular = popular;
-          draft.airingToday = airingToday;
-        });
-      } catch {
-        setValues((draft) => {
-          draft.error = "Can't find TV information.";
-        });
-      } finally {
-        setValues((draft) => {
-          draft.loading = false;
-        });
-      }
-    };
     getDates();
-  }, []);
+  }, [getDates]);
 
   return (
     <TVPresenter

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useImmer } from "use-immer";
 import VideoPresenter from "./VideoPresenter";
 import { moviesApi, tvApi } from "../../api";
@@ -21,56 +21,57 @@ const Video = (props) => {
   };
   const [values, setValues] = useImmer(state);
 
+  const getDates = useCallback(async () => {
+    const {
+      history: { push },
+    } = props;
+    const isMovie = values.isMovie;
+    const parsedId = parseInt(values.id);
+    if (isNaN(parsedId)) {
+      return push("/");
+    }
+    let result = null;
+    let video = null;
+    try {
+      if (isMovie) {
+        ({
+          data: result,
+          data: {
+            videos: { results: video },
+          },
+        } = await moviesApi.movieDetail(parsedId));
+        setValues((draft) => {
+          draft.videosLen = video.length;
+        });
+      } else {
+        ({
+          data: result,
+          data: {
+            videos: { results: video },
+          },
+        } = await tvApi.showDetail(parsedId));
+        setValues((draft) => {
+          draft.videosLen = video.length;
+        });
+      }
+      setValues((draft) => {
+        draft.result = result;
+        draft.video = video;
+      });
+    } catch {
+      setValues((draft) => {
+        draft.error = "Can't find Video information.";
+      });
+    } finally {
+      setValues((draft) => {
+        draft.loading = false;
+      });
+    }
+  }, [props, setValues, values.id, values.isMovie]);
+
   useEffect(() => {
-    const getDates = async () => {
-      const {
-        history: { push },
-      } = props;
-      const isMovie = values.isMovie;
-      const parsedId = parseInt(values.id);
-      if (isNaN(parsedId)) {
-        return push("/");
-      }
-      let result = null;
-      let video = null;
-      try {
-        if (isMovie) {
-          ({
-            data: result,
-            data: {
-              videos: { results: video },
-            },
-          } = await moviesApi.movieDetail(parsedId));
-          setValues((draft) => {
-            draft.videosLen = video.length;
-          });
-        } else {
-          ({
-            data: result,
-            data: {
-              videos: { results: video },
-            },
-          } = await tvApi.showDetail(parsedId));
-          setValues((draft) => {
-            draft.videosLen = video.length;
-          });
-        }
-        setValues((draft) => {
-          draft.result = result;
-          draft.video = video;
-        });
-      } catch {
-        setValues((draft) => {
-          draft.error = "Can't find Video information.";
-        });
-      } finally {
-        setValues((draft) => {
-          draft.loading = false;
-        });
-      }
-    };
     getDates();
-  }, []);
+  }, [getDates]);
 
   return (
     <>

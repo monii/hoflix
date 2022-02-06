@@ -83,7 +83,7 @@ const SeasonPresnter = ({ season, error, loading, result, id }) =>
           <Title>Season</Title>
           <SeasonContainer>
             {season.map((data) => (
-              <div key={season.id}>
+              <div key={data.id}>
                 <Image
                   bgUrl={
                     data.poster_path
